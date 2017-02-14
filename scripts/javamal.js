@@ -47,7 +47,7 @@ function javamal(data, human, save, pos, yaw, pitch, rotate, type) {
                     if (close !== undefined) {
                         console.log("javamal", data.substring(i + 1, close));
                         for (var j = 0; j < number; j++) javamal(data.substring(i + 1, close), human, save, pos, yaw, pitch, rotate, type);
-                        i += close - i + 1;
+                        i += close - i;
                     }
                 } else
                     for (var j = 0; j < number; j++) {
