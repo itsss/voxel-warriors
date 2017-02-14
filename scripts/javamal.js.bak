@@ -1,0 +1,36 @@
+function onPlayerChat(event){
+	let human = event.getHuman();
+	let cmd = event.getMessage();
+	if (cmd.indexOf('/') !== -1){
+		let pos = human.getPosition().slice();
+		let yaw = human.getRotation()[1];
+		let pitch = human.getRotation()[2];
+		let rotate = [Math.round(-Math.sin(yaw)), Math.round(Math.sin(pitch)), Math.round(-Math.cos(yaw))];
+		console.log(rotate);
+		cmd = cmd.split('/')[1].split('');
+		let type = "voxelBrick";
+		for (let i of cmd){
+			if (i === 's'){
+				pos[0] += rotate[0];
+				pos[2] += rotate[2];
+				Server.setBlock(pos.slice(), type);
+			}else if (i === 'd'){
+				pos[1] -= 1;
+				Server.setBlock(pos.slice(), type);
+			}else if (i === 'u'){
+				pos[1] += 1;
+				Server.setBlock(pos.slice(), type);
+			}else if (i === 'r'){
+				yaw -= Math.PI / 2;
+				rotate = [Math.round(-Math.sin(yaw)), Math.round(Math.sin(pitch)), Math.round(-Math.cos(yaw))];
+			}else if (i === 'l'){
+				yaw += Math.PI / 2;
+				rotate = [Math.round(-Math.sin(yaw)), Math.round(Math.sin(pitch)), Math.round(-Math.cos(yaw))];
+			}else if (i === 'h'){
+				type = null;
+			}else if (i === 'c'){
+				type = "voxelBrick";
+			}
+		}
+	}
+}
