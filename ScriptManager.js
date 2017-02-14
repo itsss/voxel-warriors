@@ -1,3 +1,4 @@
+/*jslint esversion: 6*/
 /** @fileoverview Script를 불러오고 관리합니다.
  * @author Scripter36(1350adwx)
  */
@@ -84,13 +85,13 @@ Server.sendMessage = function(sender, message, receiver) {
 Server.setBlock = function(position, blockType, boolBlocked) {
     if (typeof position === 'undefined' || position.length !== 3) return;
 	for (let i in position) position[i] = parseInt(position[i]);
-    if (boolBlocked == undefined) boolBlocked = false;
-    boolBlocked = boolBlocked == true;
-    if (blockType == undefined || blockType == null) {
+    if (boolBlocked === undefined) boolBlocked = false;
+    boolBlocked = boolBlocked === true;
+    if (blockType === undefined || blockType === null) {
         World.updateDestroy(position);
         Socket.objectServer.emit("eventWorldDestroy", {
             intCoordinate: position
-        })
+        });
     } else {
         World.updateCreate(position, blockType, boolBlocked);
         Socket.objectServer.emit("eventWorldCreate", {
@@ -99,31 +100,31 @@ Server.setBlock = function(position, blockType, boolBlocked) {
             boolBlocked: boolBlocked
         });
     }
-}
+};
 
 
 Server.getBlock = function(position){
 	var world = World.objectWorld[(intCoordinate[0] << 20) + (intCoordinate[1] << 10) + (intCoordinate[2] << 0)];
-	if (world == undefined) return;
+	if (world === undefined) return;
 	return world.strType;
-}
+};
 
 
 Server.setPhaseRemaining = function(phase){
 	Gameserver.intPhaseRemaining = parseInt(phase);
-}
+};
 
 Server.getPhaseRemaining = function(){
 	return Gameserver.intPhaseRemaining;
-}
+};
 
 Server.setPhaseChange = function(bool){
-	exports.isPhaseChange = bool == true;
-}
+	exports.isPhaseChange = bool === true;
+};
 
 Server.isPhaseChange = function(){
 	return exports.isPhaseChange;
-}
+};
 
 
 /**
@@ -145,7 +146,15 @@ function Human() {
         });
 		exports.sendingPlayerData = false;
         return this;
-    }
+    };
+
+    /**
+     * Human에게만 보내는 소켓을 얻어옵니다.
+     * @return {Object} 소켓
+     */
+    this.getSocket = function(){
+        return Player.objectPlayer[this.HumanIdent].objectSocket;
+    };
 
     /**
      * Human이 가리키는 사람 Ident를 설정합니다.
@@ -155,7 +164,7 @@ function Human() {
     this.setHumanIdent = function(ident) {
         this.HumanIdent = ident;
         return this;
-    }
+    };
 
     /**
      * Human이 가리키는 사람 ident를 반환합니다.
@@ -164,7 +173,7 @@ function Human() {
      */
     this.getHumanIdent = function() {
         return this.HumanIdent;
-    }
+    };
 
     /**
      * Human의 체력을 반환합니다.
@@ -175,7 +184,7 @@ function Human() {
         if (this.HumanIdent === undefined) return;
         if (Player.objectPlayer[this.HumanIdent] === undefined) return;
         return Player.objectPlayer[this.HumanIdent].intHealth;
-    }
+    };
 
     /**
      * Human의 체력을 설정합니다.
@@ -189,7 +198,7 @@ function Human() {
         Player.objectPlayer[this.HumanIdent].intHealth = health;
         this.update();
         return this;
-    }
+    };
 
     /**
      * Human의 팀명을 가져옵니다.
@@ -200,7 +209,7 @@ function Human() {
         if (this.HumanIdent === undefined) return;
         if (Player.objectPlayer[this.HumanIdent] === undefined) return;
         return Player.objectPlayer[this.HumanIdent].strTeam;
-    }
+    };
 
     /**
      * Human의 이름을 가져옵니다.
@@ -211,7 +220,7 @@ function Human() {
         if (this.HumanIdent === undefined) return;
         if (Player.objectPlayer[this.HumanIdent] === undefined) return;
         return Player.objectPlayer[this.HumanIdent].strName;
-    }
+    };
 
     /**
      * Human의 이름을 설정합니다.
@@ -224,7 +233,7 @@ function Human() {
         Player.objectPlayer[this.HumanIdent].strName = name;
         this.update();
         return this;
-    }
+    };
 
     /**
      * 플레이어의 위치를 가져옵니다.
@@ -233,7 +242,7 @@ function Human() {
     this.getPosition = function() {
         if (Player.objectPlayer[this.HumanIdent] === undefined) return;
         return Player.objectPlayer[this.HumanIdent].dblPosition;
-    }
+    };
 
     /**
      * 플레이어의 위치를 설정합니다.
@@ -245,11 +254,11 @@ function Human() {
             this.update();
         }
         return this;
-    }
+    };
 
     this.getAcceleration = function() {
         return Player.objectPlayer[this.HumanIdent].dblAcceleration;
-    }
+    };
 
     this.setAcceleration = function(acceleration) {
         if (typeof acceleration === 'object' && acceleration.length === 3) {
@@ -257,11 +266,11 @@ function Human() {
             this.update();
         }
         return this;
-    }
+    };
 
     this.getFriction = function() {
         return Player.objectPlayer[this.HumanIdent].dblFriction;
-    }
+    };
 
     this.setFriction = function(friction) {
         if (typeof friction === 'object' && friction.length === 3) {
@@ -269,11 +278,11 @@ function Human() {
             this.update();
         }
         return this;
-    }
+    };
 
     this.getGravity = function() {
         return Player.objectPlayer[this.HumanIdent].dblGravity;
-    }
+    };
 
     this.setGravity = function(gravity) {
         if (typeof gravity === 'object' && gravity.length === 3) {
@@ -281,11 +290,11 @@ function Human() {
             this.update();
         }
         return this;
-    }
+    };
 
     this.getMaxvel = function() {
         return Player.objectPlayer[this.HumanIdent].dblMaxvel;
-    }
+    };
 
     this.setMaxvel = function(maxvel) {
         if (typeof maxvel === 'object' && maxvel.length === 3) {
@@ -293,11 +302,47 @@ function Human() {
             this.update();
         }
         return this;
-    }
+    };
+
+    /**
+     * 플레이어의 좌/우 시야 회전을 가져옵니다.
+     * @return {Double} 회전각(Radian)
+     */
+    this.getYaw = function(){
+        return Player.objectPlayer[this.HumanIdent].dblRotation[1];
+    };
+
+    /**
+     * 플레이어의 좌/우 시야 회전을 설정합니다..
+     * @param {Double} yaw 회전각(Radian)
+     */
+    this.setYaw = function(yaw){
+        Player.objectPlayer[this.HumanIdent].dblRotation[1] = yaw;
+        this.update();
+        return this;
+    };
+
+    /**
+     * 플레이어의 위/아래 시야 회전을 가져옵니다.
+     * @return {Double} 회전각(Radian)
+     */
+    this.getPitch = function(){
+        return Player.objectPlayer[this.HumanIdent].dblRotation[2];
+    };
+
+    /**
+     * 플레이어의 위/아래 시야 회전을 설정합니다..
+     * @param {Double} yaw 회전각(Radian)
+     */
+    this.setPitch = function(pitch){
+        Player.objectPlayer[this.HumanIdent].dblRotation[2] = pitch;
+        this.update();
+        return this;
+    };
 
     this.getRotation = function() {
         return Player.objectPlayer[this.HumanIdent].dblRotation;
-    }
+    };
 
     this.setRotation = function(rotation) {
         if (typeof rotation === 'object' && rotation.length === 3) {
@@ -305,11 +350,11 @@ function Human() {
             this.update();
         }
         return this;
-    }
+    };
 
     this.getSize = function() {
         return Player.objectPlayer[this.HumanIdent].dblSize;
-    }
+    };
 
     this.setSize = function(size) {
         if (typeof size === 'object' && size.length === 3) {
@@ -317,11 +362,11 @@ function Human() {
             this.update();
         }
         return this;
-    }
+    };
 
     this.getVerlet = function() {
         return Player.objectPlayer[this.HumanIdent].dblVerlet;
-    }
+    };
 
     this.setVerlet = function(verlet) {
         if (Array.isArray(verlet) && verlet.length === 3) {
@@ -329,11 +374,11 @@ function Human() {
             this.update();
         }
         return this;
-    }
+    };
 
     this.getDeaths = function() {
         return Player.objectPlayer[this.HumanIdent].intDeaths;
-    }
+    };
 
     this.setDeaths = function(deaths) {
         if (typeof deaths === 'number') {
@@ -341,11 +386,11 @@ function Human() {
             this.update();
         }
         return this;
-    }
+    };
 
     this.getJumpcount = function() {
         return Player.objectPlayer[this.HumanIdent].intJumpcount;
-    }
+    };
 
     this.setJumpcount = function(jumpcount) {
         if (typeof jumpcount === 'number') {
@@ -353,11 +398,11 @@ function Human() {
             this.update();
         }
         return this;
-    }
+    };
 
     this.getKills = function() {
         return Player.objectPlayer[this.HumanIdent].intKills;
-    }
+    };
 
     this.setKills = function(kills) {
         if (typeof kills === 'number') {
@@ -365,11 +410,11 @@ function Human() {
             this.update();
         }
         return this;
-    }
+    };
 
     this.getScore = function() {
         return Player.objectPlayer[this.HumanIdent].intScore;
-    }
+    };
 
     this.setScore = function(score) {
         if (typeof score === 'number') {
@@ -377,11 +422,11 @@ function Human() {
             this.update();
         }
         return this;
-    }
+    };
 
     this.getWeapon = function() {
         return Player.objectPlayer[this.HumanIdent].intWeapon;
-    }
+    };
 
     this.setWeapon = function(weapon) {
         if (typeof weapon === 'number') {
@@ -389,7 +434,7 @@ function Human() {
             this.update();
         }
         return this;
-    }
+    };
 
     this.showTipMessage = function(message) {
         Socket.objectServer.emit('showTipMessage', {
@@ -397,7 +442,7 @@ function Human() {
             'strReceiver': this.getName()
         });
         return this;
-    }
+    };
 
     this.sendMessage = function(sender, message) {
         Socket.objectServer.emit('eventChat', {
@@ -405,27 +450,18 @@ function Human() {
             'strMessage': message.toString(),
             'strReceiver': this.getName()
         });
-    }
+    };
 
     this.isOnGround = function() {
         if (Player.objectPlayer[this.HumanIdent] === undefined) return false;
         if (Math.abs(Player.objectPlayer[this.HumanIdent].dblPosition[1] - Player.objectPlayer[this.HumanIdent].dblVerlet[1]) === 0) return true;
         return Player.objectPlayer[this.HumanIdent].boolCollisionBottom === true && Math.abs(Player.objectPlayer[this.HumanIdent].dblPosition[1] - Player.objectPlayer[this.HumanIdent].dblVerlet[1]) < 0.0001;
 
-    }
+    };
 
 	this.isOnline = function(){
 		return Player.objectPlayer[this.HumanIdent] !== undefined;
-	}
-
-    this.setCanFly = function(fly){
-        if (fly === undefined) fly = true;
-        Socket.objectServer.emit("fly", {
-            strReceiver: this.getName(),
-            fly: fly == true
-        });
-        return this;
-    }
+	};
 }
 
 var NodeRect;
@@ -502,7 +538,7 @@ exports.init = function(nodeRect) {
         //로그 띄웁니다.
         console.log("[ScriptManager] " + count + " 개의 스크립트를 로딩했습니다.");
     });
-}
+};
 
 /** @description 플레이어가 로그인할 시 onPlayerLogin 함수에 전달 될 이벤트입니다.
  * @author Scripter36(1350adwx)
@@ -526,10 +562,10 @@ exports.PlayerLoginEvent = function(objectData, resultData) {
         //undefined 일 시에만 true로 변경
         if (cancel === undefined) cancel = true;
         //Boolean 타입으로 변환
-        canceled = cancel == true;
+        canceled = cancel === true;
         //메소드 체이닝.
         return this;
-    }
+    };
 
     /** @description PlayerLoginEvent의 취소 여부를 반환합니다.
      * @author Scripter36(1350adwx)
@@ -537,7 +573,7 @@ exports.PlayerLoginEvent = function(objectData, resultData) {
      */
     this.isCanceled = function() {
         return canceled;
-    }
+    };
 
     /** @description PlayerLoginEvent를 발동시킨 플레이어의 이름을 변경합니다.
      * @author Scripter36(1350adwx)
@@ -547,7 +583,7 @@ exports.PlayerLoginEvent = function(objectData, resultData) {
     this.setName = function(name) {
         objectData.strName = name.toString();
         return this;
-    }
+    };
 
     /** @description PlayerLoginEvent를 발동시킨 플레이어의 이름을 반환합니다.
      * @author Scripter36(1350adwx)
@@ -555,7 +591,7 @@ exports.PlayerLoginEvent = function(objectData, resultData) {
      */
     this.getName = function() {
         return objectData.strName;
-    }
+    };
 
     /** @description PlayerLoginEvent를 발동시킨 플레이어의 팀 이름을 변경합니다.
      * @author Scripter36(1350adwx)
@@ -565,7 +601,7 @@ exports.PlayerLoginEvent = function(objectData, resultData) {
     this.setTeamName = function(team) {
         objectData.strTeam = team.toString();
         return this;
-    }
+    };
 
     /** @description PlayerLoginEvent를 발동시킨 플레이어의 팀 이름을 반환합니다.
      * @author Scripter36(1350adwx)
@@ -573,7 +609,7 @@ exports.PlayerLoginEvent = function(objectData, resultData) {
      */
     this.getTeamName = function() {
         return objectData.strTeam;
-    }
+    };
 
     /** @description PlayerLoginEvent가 성공하였는지를 반환합니다.
      * @author Scripter36(1350adwx)
@@ -581,7 +617,7 @@ exports.PlayerLoginEvent = function(objectData, resultData) {
      */
     this.isSuccessed = function() {
         return resultData.strType !== "typeReject";
-    }
+    };
 
     /** @description PlayerLoginEvent 실패 이유를 설정합니다.
      * @author Scripter36(1350adwx)
@@ -591,7 +627,7 @@ exports.PlayerLoginEvent = function(objectData, resultData) {
     this.setRejectReason = function(reason) {
         resultData.strMessage = reason.toString();
         return this;
-    }
+    };
 
     /** @description PlayerLoginEvent 실패 이유를 반환합니다.
      * @author Scripter36(1350adwx)
@@ -599,7 +635,7 @@ exports.PlayerLoginEvent = function(objectData, resultData) {
      */
     this.getRejectReason = function() {
         return resultData.strMessage;
-    }
+    };
 
     /** @description PlayerLoginEvent 취소 이유를 반환합니다.
      * @author Scripter36(1350adwx)
@@ -607,7 +643,7 @@ exports.PlayerLoginEvent = function(objectData, resultData) {
      */
     this.getCanceledMessage = function() {
         return canceledMessage;
-    }
+    };
 
     /** @description PlayerLoginEvent 취소 이유를 반환합니다.
      * @author Scripter36(1350adwx)
@@ -617,8 +653,8 @@ exports.PlayerLoginEvent = function(objectData, resultData) {
     this.setCanceledMessage = function(message) {
         canceledMessage = message.toString();
         return this;
-    }
-}
+    };
+};
 
 /**
  * PlayerLoginEvent를 모든 스크립트에게 전송합니다.
@@ -635,7 +671,7 @@ exports.callPlayerLoginEvent = function(objectData, objectSocket) {
         }
     }
     return event;
-}
+};
 
 /**
  * 플레이어가 채팅을 할 시 발동됩니다.
@@ -673,9 +709,9 @@ exports.PlayerChatEvent = function(objectData, objectSocket) {
      */
     this.setCanceled = function(cancel) {
         if (cancel === undefined) cancel = true;
-        canceled = cancel == true;
+        canceled = cancel === true;
         return this;
-    }
+    };
 
     /**
      * PlayerChatEvent 취소 여부를 반환합니다.
@@ -684,7 +720,7 @@ exports.PlayerChatEvent = function(objectData, objectSocket) {
      */
     this.isCanceled = function() {
         return canceled;
-    }
+    };
 
     /**
      * PlayerChatEvent를 발생시킨 플레이어의 Ident를 가져옵니다.
@@ -694,7 +730,7 @@ exports.PlayerChatEvent = function(objectData, objectSocket) {
      */
     this.getPlayerIdent = function() {
         return objectSocket.strIdent;
-    }
+    };
 
     /**
      * PlayerChatEvent를 발생시킨 Human을 가져옵니다.
@@ -703,7 +739,7 @@ exports.PlayerChatEvent = function(objectData, objectSocket) {
      */
     this.getHuman = function() {
         return new Human().setHumanIdent(objectSocket.strIdent);
-    }
+    };
 
     /**
      * PlayerChatEvent에서 채팅 메시지를 가져옵니다.
@@ -712,7 +748,7 @@ exports.PlayerChatEvent = function(objectData, objectSocket) {
      */
     this.getMessage = function() {
         return objectData.strMessage;
-    }
+    };
 
     /**
      * PlayerChatEvent에서 채팅 메시지를 변경합니다.
@@ -722,7 +758,7 @@ exports.PlayerChatEvent = function(objectData, objectSocket) {
     this.setMessage = function(message) {
         objectData.strMessage = message.toString();
         return this;
-    }
+    };
 
     /**
      * PlayerChatEvent를 발생시킨 사람 이름을 반환합니다.
@@ -731,7 +767,7 @@ exports.PlayerChatEvent = function(objectData, objectSocket) {
      */
     this.getName = function() {
         return name;
-    }
+    };
 
     /**
      * PlayerChatEvent를 발생시킨 사람 이름을 수정합니다.
@@ -741,7 +777,7 @@ exports.PlayerChatEvent = function(objectData, objectSocket) {
     this.setName = function(name) {
         name = name.toString();
         return this;
-    }
+    };
 
     /**
      * PlayerChatEvent를 발생시킨 플레이어의 Ident를 가져옵니다.
@@ -751,7 +787,7 @@ exports.PlayerChatEvent = function(objectData, objectSocket) {
      */
     this.getPlayerIdent = function() {
         return objectSocket.strIdent;
-    }
+    };
 
     /**
      * PlayerChatEvent를 발생시킨 Human을 가져옵니다.
@@ -760,7 +796,7 @@ exports.PlayerChatEvent = function(objectData, objectSocket) {
      */
     this.getHuman = function() {
         return new Human().setHumanIdent(objectSocket.strIdent);
-    }
+    };
 
     /**
      * PlayerChatEvent에서의 채팅 최대 길이를 불러옵니다.
@@ -769,7 +805,7 @@ exports.PlayerChatEvent = function(objectData, objectSocket) {
      */
     this.getMaxLength = function() {
         return maxLeng;
-    }
+    };
 
     /**
      * PlayerChatEvent에서의 채팅 최대 길이를 설정합니다.
@@ -782,7 +818,7 @@ exports.PlayerChatEvent = function(objectData, objectSocket) {
         if (leng < 0) return this;
         maxLeng = leng;
         return this;
-    }
+    };
 
     /**
      * PlayerChatEvent 취소시 나올 메시지를 설정합니다.
@@ -790,12 +826,12 @@ exports.PlayerChatEvent = function(objectData, objectSocket) {
      * @param {String} message 메시지
      */
     this.setCanceledMessage = function(message) {
-        if (message == undefined || message === null) {
+        if (message === undefined || message === null) {
             message = null;
         } else message = message.toString();
         canceledMessage = message;
         return this;
-    }
+    };
 
     /**
      * PlayerChatEvent 취소시 나올 메시지를 가져옵니다.
@@ -804,7 +840,7 @@ exports.PlayerChatEvent = function(objectData, objectSocket) {
      */
     this.getCanceledMessage = function() {
         return canceledMessage;
-    }
+    };
 
     /**
      * PlayerChatEvent 취소시 나올 사람 이름을 설정합니다.
@@ -812,12 +848,12 @@ exports.PlayerChatEvent = function(objectData, objectSocket) {
      * @param {String} sender 이름
      */
     this.setCanceledSender = function(sender) {
-        if (sender == undefined || sender === null) {
+        if (sender === undefined || sender === null) {
             sender = "";
         } else sender = sender.toString();
         canceledSender = sender;
         return this;
-    }
+    };
 
     /**
      * PlayerChatEvent 취소시 나올 사람 이름을 가져옵니다.
@@ -826,8 +862,8 @@ exports.PlayerChatEvent = function(objectData, objectSocket) {
      */
     this.getCanceledSender = function() {
         return canceledSender;
-    }
-}
+    };
+};
 
 /**
  * PlayerChatEvent를 모든 스크립트에게 전송합니다.
@@ -844,7 +880,7 @@ exports.callPlayerChatEvent = function(objectData, objectSocket) {
         }
     }
     return event;
-}
+};
 
 /**
  * 플레이어가 블럭을 설치했을 때 발동됩니다.
@@ -865,9 +901,9 @@ exports.BlockPlaceEvent = function(objectData, objectSocket) {
      */
     this.setCanceled = function(cancel) {
         if (cancel === undefined) cancel = true;
-        canceled = cancel == true;
+        canceled = cancel === true;
         return this;
-    }
+    };
 
     /**
      * BlockPlaceEvent의 취소 여부를 반환합니다.
@@ -876,7 +912,7 @@ exports.BlockPlaceEvent = function(objectData, objectSocket) {
      */
     this.isCanceled = function() {
         return canceled;
-    }
+    };
 
     /**
      * BlockPlaceEvent에서 설치될 블럭의 타입을 설정합니다.
@@ -887,7 +923,7 @@ exports.BlockPlaceEvent = function(objectData, objectSocket) {
         if (type === undefined) return this;
         objectData.strType = type.toString();
         return this;
-    }
+    };
 
     /**
      * BlockPlaceEvent에서 설치될 블럭의 타입을 반환합니다.
@@ -896,7 +932,7 @@ exports.BlockPlaceEvent = function(objectData, objectSocket) {
      */
     this.getBlockType = function() {
         return objectData.strType;
-    }
+    };
 
     /**
      * BlockPlaceEvent를 발생시킨 Human을 가져옵니다.
@@ -905,7 +941,7 @@ exports.BlockPlaceEvent = function(objectData, objectSocket) {
      */
     this.getHuman = function() {
         return new Human().setHumanIdent(objectSocket.strIdent);
-    }
+    };
 
     /**
      * BlockPlaceEvent가 일어난 위치를 반환합니다.
@@ -914,7 +950,7 @@ exports.BlockPlaceEvent = function(objectData, objectSocket) {
      */
     this.getPosition = function() {
         return objectData.intCoordinate;
-    }
+    };
 
     /**
      * BlockPlaceEvent가 일어날 위치를 설정합니다.
@@ -927,9 +963,8 @@ exports.BlockPlaceEvent = function(objectData, objectSocket) {
             return this;
         }
         return this;
-    }
-
-}
+    };
+};
 
 
 /**
@@ -951,9 +986,9 @@ exports.BlockBreakEvent = function(objectData, objectSocket) {
      */
     this.setCanceled = function(cancel) {
         if (cancel === undefined) cancel = true;
-        canceled = cancel == true;
+        canceled = cancel === true;
         return this;
-    }
+    };
 
     /**
      * BlockBreakEvent의 취소 여부를 반환합니다.
@@ -962,7 +997,7 @@ exports.BlockBreakEvent = function(objectData, objectSocket) {
      */
     this.isCanceled = function() {
         return canceled;
-    }
+    };
 
     /**
      * BlockBreakEvent를 발생시킨 플레이어의 Ident를 가져옵니다.
@@ -972,7 +1007,7 @@ exports.BlockBreakEvent = function(objectData, objectSocket) {
      */
     this.getPlayerIdent = function() {
         return objectSocket.strIdent;
-    }
+    };
 
     /**
      * BlockBreakEvent를 발생시킨 Human을 가져옵니다.
@@ -981,7 +1016,7 @@ exports.BlockBreakEvent = function(objectData, objectSocket) {
      */
     this.getHuman = function() {
         return new Human().setHumanIdent(objectSocket.strIdent);
-    }
+    };
 
     /**
      * BlockBreakEvent가 일어난 위치를 반환합니다.
@@ -990,7 +1025,7 @@ exports.BlockBreakEvent = function(objectData, objectSocket) {
      */
     this.getPosition = function() {
         return objectData.intCoordinate;
-    }
+    };
 
     /**
      * BlockBreakEvent가 일어날 위치를 설정합니다.
@@ -1003,9 +1038,9 @@ exports.BlockBreakEvent = function(objectData, objectSocket) {
             return this;
         }
         return this;
-    }
+    };
 
-}
+};
 
 /**
  * BlockPlaceEvent를 모든 스크립트에게 전송합니다.
@@ -1022,7 +1057,7 @@ exports.callBlockPlaceEvent = function(objectData, objectSocket) {
         }
     }
     return event;
-}
+};
 
 /**
  * BlockBreakEvent를 모든 스크립트에게 전송합니다.
@@ -1039,7 +1074,7 @@ exports.callBlockBreakEvent = function(objectData, objectSocket) {
         }
     }
     return event;
-}
+};
 
 /**
  * 플레이어가 연결을 종료할 때 발동됩니다.
@@ -1055,7 +1090,7 @@ exports.PlayerQuitEvent = function(objectSocket) {
      */
     this.getPlayerIdent = function() {
         return objectSocket.strIdent;
-    }
+    };
 
     /**
      * PlayerQuitEvent를 발생시킨 Human을 가져옵니다.
@@ -1064,7 +1099,7 @@ exports.PlayerQuitEvent = function(objectSocket) {
      */
     this.getHuman = function() {
         return new Human().setHumanIdent(objectSocket.strIdent);
-    }
+    };
 
     /**
      * PlayerQuitEvent를 발동시킨 사람 이름을 반환합니다.
@@ -1072,8 +1107,8 @@ exports.PlayerQuitEvent = function(objectSocket) {
      */
     this.getName = function() {
         return this.getHuman().getName();
-    }
-}
+    };
+};
 
 /**
  * PlayerQuitEvent를 모든 스크립트에게 전송합니다.
@@ -1082,7 +1117,7 @@ exports.PlayerQuitEvent = function(objectSocket) {
  * @return {BlockBreakEvent} PlayerQuitEvent
  */
 exports.callPlayerQuitEvent = function(objectSocket) {
-    if (new Human().setHumanIdent(objectSocket.strIdent).getName() == "") return;
+    if (new Human().setHumanIdent(objectSocket.strIdent).getName() === "") return;
     let event = new exports.PlayerQuitEvent(objectSocket);
     for (let i of exports.scripts) {
         if (typeof i.onPlayerQuit != "undefined") {
@@ -1090,7 +1125,54 @@ exports.callPlayerQuitEvent = function(objectSocket) {
         }
     }
     return event;
-}
+};
+
+
+exports.PlayerRespawnEvent = function(objectPlayer) {
+    /**
+     * PlayerRespawnEvent를 발생시킨 플레이어의 Ident를 가져옵니다.
+     * @author Scripter36(1350adwx)
+     * @return {String} 플레이어 Ident
+     * @deprecated getHuman을 사용하여 주세요.
+     */
+    this.getPlayerIdent = function() {
+        return objectPlayer.strIdent;
+    };
+
+    /**
+     * PlayerRespawnEvent를 발생시킨 Human을 가져옵니다.
+     * @author Scripter36(1350adwx)
+     * @return {Human} Human
+     */
+    this.getHuman = function() {
+        return new Human().setHumanIdent(objectPlayer.strIdent);
+    };
+
+    /**
+     * PlayerRespawnEvent를 발동시킨 사람 이름을 반환합니다.
+     * @return {String} 이름
+     */
+    this.getName = function() {
+        return this.getHuman().getName();
+    };
+};
+
+/**
+ * PlayerRespawnEvent를 모든 스크립트에게 전송합니다.
+ * @author Scripter36(1350adwx)
+ * @param  {Object} objectSocket
+ * @return {BlockBreakEvent} PlayerRespawnEvent
+ */
+exports.callPlayerRespawnEvent = function(objectSocket) {
+    if (new Human().setHumanIdent(objectSocket.strIdent).getName() === "") return;
+    let event = new exports.PlayerRespawnEvent(objectSocket);
+    for (let i of exports.scripts) {
+        if (typeof i.onPlayerRespawn != "undefined") {
+            i.onPlayerRespawn(event);
+        }
+    }
+    return event;
+};
 
 /**
  * 플레이어가 플레이어를 공격할 때 발동됩니다.
@@ -1098,20 +1180,20 @@ exports.callPlayerQuitEvent = function(objectSocket) {
  * @param {Object} objectItem   맞힌 아이템
  * @class
  */
-exports.PlayerHitEvent = function(objectPlayer, objectItem, damage) {
+exports.PlayerHitEvent = function(objectPlayer, objectItem, Damage) {
     /** @type {Boolean} */
     var canceled = false;
     /** @type {Number} */
-    var damage = damage;
+    var damage = Damage;
     /**
      * PlayerHitEvent를 취소합니다.
      * @param {Boolean} cancel 취소 여부
      */
     this.setCanceled = function(cancel) {
-        if (cancel == undefined) cancel = true;
-        canceled = cancel == true;
+        if (cancel === undefined) cancel = true;
+        canceled = cancel === true;
         return this;
-    }
+    };
 
     /**
      * PlayerHitEvent 취소 여부를 반환합니다.
@@ -1119,7 +1201,7 @@ exports.PlayerHitEvent = function(objectPlayer, objectItem, damage) {
      */
     this.isCanceled = function() {
         return canceled;
-    }
+    };
 
     /**
      * 공격한 사람을 반환합니다.
@@ -1127,7 +1209,7 @@ exports.PlayerHitEvent = function(objectPlayer, objectItem, damage) {
      */
     this.getAttacker = function() {
         return new Human().setHumanIdent(objectItem.strPlayer);
-    }
+    };
 
     /**
      * 공격한 사람을 설정합니다.
@@ -1136,7 +1218,7 @@ exports.PlayerHitEvent = function(objectPlayer, objectItem, damage) {
     this.setAttacker = function(human) {
         if (human instanceof Human) objectItem.strPlayer = human.getHumanIdent();
         return this;
-    }
+    };
 
     /**
      * 공격받은 사람을 반환합니다.
@@ -1144,7 +1226,7 @@ exports.PlayerHitEvent = function(objectPlayer, objectItem, damage) {
      */
     this.getVictim = function() {
         return new Human().setHumanIdent(objectPlayer.strIdent);
-    }
+    };
 
     /**
      * 공격받은 사람을 설정합니다.
@@ -1153,7 +1235,7 @@ exports.PlayerHitEvent = function(objectPlayer, objectItem, damage) {
     this.setVictim = function(human) {
         if (human instanceof Human) objectPlayer = human.getHumanIdent();
         return this;
-    }
+    };
 
     /**
      * 공격의 데미지를 반환합니다.
@@ -1161,7 +1243,7 @@ exports.PlayerHitEvent = function(objectPlayer, objectItem, damage) {
      */
     this.getDamage = function() {
         return damage;
-    }
+    };
 
     /**
      * 공격의 데미지를 설정합니다.
@@ -1171,7 +1253,7 @@ exports.PlayerHitEvent = function(objectPlayer, objectItem, damage) {
         if (isNaN(d)) return this;
         damage = parseInt(d);
         return this;
-    }
+    };
 
     /**
      * 아이템의 이름을 받아옵니다.
@@ -1179,7 +1261,7 @@ exports.PlayerHitEvent = function(objectPlayer, objectItem, damage) {
      */
     this.getItemName = function() {
         return objectItem.strIdent.split("-")[0];
-    }
+    };
 
     /**
      * 아이템의 이름을 설정합니다.
@@ -1189,8 +1271,8 @@ exports.PlayerHitEvent = function(objectPlayer, objectItem, damage) {
         let ident = objectItem.strIdent.split("-");
         ident.splice(0, 1);
         objectItem.strIdent = name.toString() + "-" + ident;
-    }
-}
+    };
+};
 
 /**
  * PlayerHitEvent를 모든 스크립트에게 전송합니다.
@@ -1208,8 +1290,7 @@ exports.callPlayerHitEvent = function(objectPlayer, objectItem, damage) {
         }
     }
     return event;
-}
-
+};
 
 /**
  * 플레이어가 죽을 때 발동됩니다.
@@ -1224,10 +1305,10 @@ exports.PlayerDeathEvent = function(objectPlayer) {
      * @param {Boolean} cancel 취소 여부
      */
     this.setCanceled = function(cancel) {
-        if (cancel == undefined) cancel = true;
-        canceled = cancel == true;
+        if (cancel === undefined) cancel = true;
+        canceled = cancel === true;
         return this;
-    }
+    };
 
     /**
      * PlayerDeathEvent 취소 여부를 반환합니다.
@@ -1235,7 +1316,7 @@ exports.PlayerDeathEvent = function(objectPlayer) {
      */
     this.isCanceled = function() {
         return canceled;
-    }
+    };
 
     /**
      * 죽은 사람을 반환합니다.
@@ -1243,7 +1324,7 @@ exports.PlayerDeathEvent = function(objectPlayer) {
      */
     this.getHuman = function() {
         return new Human().setHumanIdent(objectPlayer.strIdent);
-    }
+    };
 
     /**
      * 죽은 사람을 설정합니다.
@@ -1252,8 +1333,8 @@ exports.PlayerDeathEvent = function(objectPlayer) {
     this.setHuman = function(human) {
         if (human instanceof Human) objectPlayer = human.getHumanIdent();
         return this;
-    }
-}
+    };
+};
 
 /**
  * PlayerDeathEvent를 모든 스크립트에게 전송합니다.
@@ -1269,7 +1350,7 @@ exports.callPlayerDeathEvent = function(objectPlayer) {
         }
     }
     return event;
-}
+};
 
 
 exports.callServerTickEvent = function() {
@@ -1278,8 +1359,4 @@ exports.callServerTickEvent = function() {
             i.onServerTick();
         }
     }
-
-    setTimeout(function() {
-        exports.callServerTickEvent();
-    }, 500);
-}
+};

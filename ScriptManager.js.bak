@@ -35,7 +35,7 @@ Server.getExactPlayer = function(name) {
     }
     console.log("Cannot Find Player " + name + ".");
     return;
-}
+};
 
 /**
  * Human을 단편적인 이름으로 가져옵니다.
@@ -51,7 +51,7 @@ Server.getPlayer = function(name) {
     }
     console.log("Cannot Find Player " + name + ".");
     return;
-}
+};
 
 /**
  * 메시지를 전송합니다.
@@ -73,13 +73,13 @@ Server.sendMessage = function(sender, message, receiver) {
             'strReceiver': receiver.getName()
         });
     }
-}
+};
 
 /**
  * 블럭을 설치합니다.
  * @param {Array} position      블럭 설치 위치
  * @param {String} blockType    블럭 이름
- * @param {Boolean} boolBlocked
+ * @param {Boolean} boolBlocked 플레이어가 부술 수 없으면 true
  */
 Server.setBlock = function(position, blockType, boolBlocked) {
     if (typeof position === 'undefined' || position.length !== 3) return;
@@ -413,10 +413,19 @@ function Human() {
         return Player.objectPlayer[this.HumanIdent].boolCollisionBottom === true && Math.abs(Player.objectPlayer[this.HumanIdent].dblPosition[1] - Player.objectPlayer[this.HumanIdent].dblVerlet[1]) < 0.0001;
 
     }
-	
+
 	this.isOnline = function(){
 		return Player.objectPlayer[this.HumanIdent] !== undefined;
 	}
+
+    this.setCanFly = function(fly){
+        if (fly === undefined) fly = true;
+        Socket.objectServer.emit("fly", {
+            strReceiver: this.getName(),
+            fly: fly == true
+        });
+        return this;
+    }
 }
 
 var NodeRect;

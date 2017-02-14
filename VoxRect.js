@@ -306,7 +306,7 @@ var VoxConf = require(__dirname + '/VoxConf.js')();
 				if (Player.objectPlayer[objectSocket.strIdent] === undefined) {
 					return;
 				}
-				
+
 				ScriptManager.callServerTickEvent();
 
 				{
@@ -501,7 +501,7 @@ var VoxConf = require(__dirname + '/VoxConf.js')();
 				if (Player.objectPlayer[objectSocket.strIdent] === undefined) {
 					return;
 				}
-				
+
 				if (ScriptManager.sendingPlayerData) return;
 
 				{
@@ -1101,6 +1101,7 @@ var Gameserver = {
 
 			}
 		}
+		ScriptManager.callPlayerRespawnEvent(objectPlayer);
 	},
 
 	playerHit: function(objectPlayer, objectItem) {
