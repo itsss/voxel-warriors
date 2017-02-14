@@ -1,12 +1,3 @@
-/*jslint esversion: 6*/
-
-function onPlayerLogin(event){
-	if (event.getName() !== "NAVER"){
-		event.setCanceled();
-		event.setCanceledMessage("렉걸리니까 들어와서 오류만들지좀 마요 ;;");
-	}
-}
-
 function javamal(data, save, pos, yaw, pitch, rotate, type, human){
 	try{
 		for (var i of data){
