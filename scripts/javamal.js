@@ -156,6 +156,10 @@ function onPlayerChat(event) {
         }
     } else if (data[0] === "promise") {
         try {
+			if (data[1].length !== 1){
+				human.sendMessage("[Error]", "함수 / 변수명은 한 글자여야 합니다.");
+				return;
+			}
             if (isNaN(data[2])) {
                 if (playerPromise[human.getHumanIdent()] === undefined) playerPromise[human.getHumanIdent()] = [];
                 playerPromise[human.getHumanIdent()][data[1]] = data[2];
