@@ -120,6 +120,19 @@ function onPlayerChat(event) {
     var data = cmd.split(' ');
     if (data[0].startsWith("do")) {
         try {
+			var _playerPromise = [], _playerVariable = [];
+			for (var i in playerPromise){
+				_playerPromise[i] = [];
+				for (var j in playerPromise[i]){
+					_playerPromise[i][j] = playerPromise[i][j];
+				}
+			}
+			for (var i in playerVariable){
+				_playerVariable[i] = [];
+				for (var j in playerVariable[i]){
+					_playerVariable[i][j] = playerVariable[i][j];
+				}
+			}
             var maxPlay = 1;
             if (data[0].indexOf('_') !== -1) maxPlay = parseInt(data[0].split('_')[1]);
             data.splice(0, 1);
@@ -135,6 +148,8 @@ function onPlayerChat(event) {
             var rotate = [Math.round(-Math.sin(yaw)), Math.round(Math.sin(pitch)), Math.round(-Math.cos(yaw))];
             var type = "voxelDirt";
             javamal(mal, human, save, pos, yaw, pitch, rotate, type);
+			playerPromise = _playerPromise;
+			playerVariable = _playerVariable;
             human.sendMessage("[JavaMAL]", cmd + " 실행 완료!");
         } catch (e) {
             human.sendMessage("[Error]", e);
