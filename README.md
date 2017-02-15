@@ -1,6 +1,5 @@
-#voxel-warriors
-this project aims to develop a game with voxel based graphics and a gameplay similar to capture the flag.
-
+#voxel-JavaMAL
+   
 ##play
 since this game is purely multiplayer based, it is required to join a server. you can therefore simply navigate to [www.voxel-warriors.com](http://www.voxel-warriors.com/) in order to find a list of active servers. it is also possible to setup a new server, what is further described below.
 
